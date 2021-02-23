@@ -8,6 +8,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MainActivity extends Activity {
+public class WeatherDetails extends Activity {
     public GpsTracker gpsTracker;
     public double latitude,longitude;
     public static final String JSON_ARRAY_WEATHER = "weather";
@@ -40,24 +41,36 @@ public class MainActivity extends Activity {
     public TextView tv_address;
     public ArrayList arrayList;
     public Adapter adapter;
+    public ImageView refresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.weather_details);
+        refresh = findViewById(R.id.refresh);
         listView = findViewById(R.id.listView);
         tv_address = findViewById(R.id.current_location);
+        //Network check to see if device have internet connectio
         check_permission();
+        //Getting lat, lon
         getLocation();
+        //All thing being equal the weather app will make a call to the api
         if(isNetworkAvailable(getApplicationContext())) {
             getWeather("http://api.openweathermap.org/data/2.5/weather?lat="+latitude+"&lon="+longitude+"&appid=53f9d8e4213222cf517d86dc406d67fc");
         }else {
+            //as requested an error is made known if it exists
             show_toast(getString(R.string.no_connection));
         }
+        //Reloading the page will give me new coodinates and get new data
+        refresh.setOnClickListener(view -> {
+            finish();
+            startActivity(getIntent());
+        });
     }
-
+    //method for toasting
     private void show_toast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
+   // method for checking permissions
     private void check_permission(){
         try {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -68,7 +81,7 @@ public class MainActivity extends Activity {
         }
     }
     public void getLocation() {
-        gpsTracker = new GpsTracker(MainActivity.this);
+        gpsTracker = new GpsTracker(WeatherDetails.this);
         if (gpsTracker.canGetLocation()) {
             try {
                 latitude = gpsTracker.getLatitude();
@@ -83,6 +96,7 @@ public class MainActivity extends Activity {
         ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
+    //Api All method
     public void getWeather(final String url){
         try {
             show_dialog(getString(R.string.loading));
@@ -139,6 +153,7 @@ public class MainActivity extends Activity {
             show_toast(getString(R.string.comm_error));
         }
     }
+    // method to show dialog bodx for loading
     public void show_dialog(String txt) {
         try {
             loading = ProgressDialog.show(this, txt, getString(R.string.wait), false, false);
@@ -146,6 +161,7 @@ public class MainActivity extends Activity {
             loading.dismiss();
         }
     }
+    //getting details of user eg address
     public void getLocationDetails(){
         if(gpsTracker.canGetLocation()){
             try {
