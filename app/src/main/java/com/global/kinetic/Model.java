@@ -1,16 +1,10 @@
 package com.global.kinetic;
 
-public class MyData {
+public class Model {
     private String id;
     private String main;
     private String description;
     private String icon;
-    public MyData(String id, String main, String description, String icon) {
-        this.id = id;
-        this.main = main;
-        this.description = description;
-        this.icon = icon;
-    }
     public String getID() {
         return id;
     }
@@ -20,7 +14,7 @@ public class MyData {
     public String getMain() {
         return main;
     }
-    public void setMain(String name) {
+    public void setMain(String main) {
         this.main = main;
     }
     public String getDescription() {
@@ -32,7 +26,7 @@ public class MyData {
     public String getIcon() {
         return icon;
     }
-    public void setIcon(String thumbnail) {
+    public void setIcon(String icon) {
         this.icon = icon;
     }
 }

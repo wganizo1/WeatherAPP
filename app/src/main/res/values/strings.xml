@@ -9,4 +9,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="no_connection">No Internet Connection</string>
+    <string name="loading">Loading...</string>
+    <string name="comm_error">COMMUNICATION ERROR!!!</string>
+    <string name="wait">Please wait...</string>
+    <string name="location_not_found_error">Location Not Found!!!</string>
+    <string name="welcome">Welcome</string>
 </resources>
